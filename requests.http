@@ -1,0 +1,76 @@
+@baseUrl = https://localhost:5001
+@adminToken = paste-admin-token
+@customerToken = paste-customer-token
+@customerId = paste-customer-id
+@productId = paste-product-id
+@orderId = paste-order-id
+
+### Login as bootstrap admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "ReplaceWithAdminPassword123"
+}
+
+### Register customer
+POST {{baseUrl}}/api/customers
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "email": "customer@example.com",
+  "fullName": "Customer Company",
+  "legalAddress": "1 Test Street",
+  "permissions": [
+    "ProductsRead",
+    "OrdersReadOwn",
+    "OrdersCreate",
+    "OrdersCancelOwn"
+  ]
+}
+
+### Complete customer password setup
+POST {{baseUrl}}/api/auth/set-password
+Content-Type: application/json
+
+{
+  "email": "customer@example.com",
+  "token": "paste-token-from-email-log-or-provider",
+  "newPassword": "CustomerPass123"
+}
+
+### Create product
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "sku": "SKU-001",
+  "name": "Wholesale item",
+  "description": "Box of items",
+  "price": 120.50
+}
+
+### Customer creates order
+POST {{baseUrl}}/api/orders
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "quantity": 2
+    }
+  ]
+}
+
+### Customer views own orders
+GET {{baseUrl}}/api/orders/my
+Authorization: Bearer {{customerToken}}
+
+### Customer cancels unpaid order
+POST {{baseUrl}}/api/orders/{{orderId}}/cancel
+Authorization: Bearer {{customerToken}}

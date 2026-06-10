@@ -1,0 +1,15 @@
+**/.git
+**/.vs
+**/.vscode
+**/.idea
+**/bin
+**/obj
+**/TestResults
+**/.verify
+**/.artifacts
+**/*.user
+**/*.suo
+**/*.DotSettings.user
+.env
+data-protection-keys
+webapi-verify.*.log
